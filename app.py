@@ -1,4 +1,4 @@
-# app.py
+import os
 from flask import Flask
 from flask_cors import CORS
 from extensions import db
@@ -6,19 +6,17 @@ from routes.sensor import sensor_bp
 from routes.status import status_bp
 from routes.reports import reports_bp
 from routes.override import override_bp
-import os
+
 
 def create_app():
     app = Flask(__name__)
     CORS(app)
 
     db_url = os.getenv("DATABASE_URL", "postgresql://postgres:password@localhost:5432/powerwatch")
-# Render uses postgres:// but SQLAlchemy needs postgresql://
-if db_url.startswith("postgres://"):
-    db_url = db_url.replace("postgres://", "postgresql://", 1)
-app.config["SQLALCHEMY_DATABASE_URI"] = db_url
-    )
+    if db_url.startswith("postgres://"):
+        db_url = db_url.replace("postgres://", "postgresql://", 1)
 
+    app.config["SQLALCHEMY_DATABASE_URI"] = db_url
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev-secret-key")
 
@@ -33,6 +31,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = db_url
         db.create_all()
 
     return app
+
 
 if __name__ == "__main__":
     app = create_app()
