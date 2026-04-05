@@ -1,3 +1,4 @@
+# app.py
 import os
 from flask import Flask
 from flask_cors import CORS
@@ -6,6 +7,7 @@ from routes.sensor import sensor_bp
 from routes.status import status_bp
 from routes.reports import reports_bp
 from routes.override import override_bp
+from routes.community import community_bp
 
 
 def create_app():
@@ -22,10 +24,11 @@ def create_app():
 
     db.init_app(app)
 
-    app.register_blueprint(sensor_bp,   url_prefix="/api/sensor")
-    app.register_blueprint(status_bp,   url_prefix="/api/status")
-    app.register_blueprint(reports_bp,  url_prefix="/api/reports")
-    app.register_blueprint(override_bp, url_prefix="/api/override")
+    app.register_blueprint(sensor_bp,    url_prefix="/api/sensor")
+    app.register_blueprint(status_bp,    url_prefix="/api/status")
+    app.register_blueprint(reports_bp,   url_prefix="/api/reports")
+    app.register_blueprint(override_bp,  url_prefix="/api/override")
+    app.register_blueprint(community_bp, url_prefix="/api/community")
 
     with app.app_context():
         db.create_all()
