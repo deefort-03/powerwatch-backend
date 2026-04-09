@@ -9,7 +9,7 @@ status_bp = Blueprint("status", __name__)
 # With no voltage sensor, the NodeMCU only pings when it has power (status=ON).
 # If we haven't heard from it in 10 minutes → the power is OFF.
 # So stale = OFF (not UNKNOWN like before).
-STALE_MINUTES = 10
+STALE_MINUTES = 1
 # ────────────────────────────────────────────────────────────────────────────
 
 def get_location_status(location):
