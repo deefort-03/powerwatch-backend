@@ -17,16 +17,18 @@ def require_api_key():
 def update_daily_summary(location, status, recorded_at):
     day = recorded_at.date()
     summary = DailySummary.query.filter_by(location=location, date=day).first()
+
     if not summary:
-        summary = DailySummary(location=location, date=day)
+        summary = DailySummary(location=location, date=day, hours_on=0.0, hours_off=0.0, reading_count=0)
         db.session.add(summary)
-    # Each ping = ~5 minutes of data
+
     hours = 5 / 60
     if status == "ON":
-        summary.hours_on += hours
+        summary.hours_on = (summary.hours_on or 0.0) + hours
     else:
-        summary.hours_off += hours
-    summary.reading_count += 1
+        summary.hours_off = (summary.hours_off or 0.0) + hours
+
+    summary.reading_count = (summary.reading_count or 0) + 1
     db.session.commit()
 
 @sensor_bp.route("/ingest", methods=["POST"])
